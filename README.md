@@ -52,7 +52,7 @@ O sistema foi desenhado para operar de forma distribuída:
 - [x] Implementação dos microsserviços (Node.js) 
 - [x] Persistência de dados (MySQL) 
 - [x] Autenticação segura (JWT)
-- [ ] Containerização (Docker)
+- [x] Containerização (Docker)
 - [ ] Pipeline de CI/CD (GitHub Actions) 
 - [ ] Deploy na AWS (ECS + RDS) 
 
