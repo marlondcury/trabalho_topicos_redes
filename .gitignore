@@ -1,5 +1,32 @@
+# --- Dependências (Pesado demais, nunca suba isso) ---
 node_modules/
+*/node_modules/
+
+# --- Segurança (Senhas e Chaves) ---
 .env
-.DS_Store
-coverage/
+.env.local
+.env.*
+*.pem
+
+# --- Build do Frontend (Vite/React) ---
 dist/
+build/
+coverage/
+
+# --- Logs e Arquivos de Erro ---
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# --- Sistema Operacional (Lixo do Mac/Windows) ---
+.DS_Store
+Thumbs.db
+
+# --- IDEs (Configurações do seu VS Code) ---
+.vscode/
+.idea/
+
+# --- Docker (Se tiver volumes locais mapeados) ---
+mysql_data/

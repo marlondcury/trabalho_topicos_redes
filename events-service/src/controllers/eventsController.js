@@ -8,7 +8,7 @@ const EventsController = {
     createEvent: async (req, res) =>{
         const{id, title, description, event_date, location } = req.body;
         try{
-            const eventId = await EventsModel.create(id,title,description, event_date, location);
+            const eventId = await EventsModel.create(title,description, event_date, location);
             res.status(201).json({'evento criado!': eventId});
         }
         catch(error){

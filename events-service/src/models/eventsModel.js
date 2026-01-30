@@ -3,9 +3,11 @@ const db = require('../../db');
 
 const EventsModel = {
 
-    create: async (id, title, description, event_date, location) => {
+    create: async (title, description, event_date, location) => {
         const [result] = await db.execute(
-        'INSERT INTO events (id, title, description, event_date, location) VALUES (?, ?, ?, ?, ?)',[id, title, description, event_date, location]);
+            'INSERT INTO events (title, description, event_date, location) VALUES (?, ?, ?, ?)',
+            [title, description, event_date, location]
+        );
 
         return result.insertId;
     },

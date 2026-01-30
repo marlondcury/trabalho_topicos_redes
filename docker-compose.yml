@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # 1. Serviço do Banco de Dados
+  mysql:
+    image: mysql:8.0
+    container_name: casi_mysql_container
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: casi_db
+      MYSQL_USER: casi_dev
+      MYSQL_PASSWORD: casi123
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql # Salva os dados para não sumir se reiniciar
+
+  # 2. Serviço de Autenticação
+  auth-service:
+    build: ./auth-service # Constrói usando o Dockerfile da pasta auth
+    container_name: auth_container
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=mysql      # <--- MÁGICA: Aponta para o container 'mysql'
+      - DB_USER=casi_dev
+      - DB_PASSWORD=casi123
+      - DB_NAME=casi_db
+      - JWT_SECRET=segredo_do_casi
+      - PORT=3000
+    depends_on:
+      - mysql
+
+  # 3. Serviço de Eventos
+  events-service:
+    build: ./events-service
+    container_name: events_container
+    ports:
+      - "3301:3001" # Mapeia porta 3301 do seu PC para 3001 do container (para evitar conflito se quiser) ou 3001:3001
+    environment:
+      - DB_HOST=mysql      # <--- MÁGICA
+      - DB_USER=casi_dev
+      - DB_PASSWORD=casi123
+      - DB_NAME=casi_db
+      - PORT=3001
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:
