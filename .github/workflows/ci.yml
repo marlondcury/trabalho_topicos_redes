@@ -1,0 +1,45 @@
+name: CI Pipeline - Sistema CA-SI 🚀
+
+# Quando esse robô deve acordar?
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  # Tarefa 1: Testar o Backend e Infra (Docker)
+  build-backend:
+    runs-on: ubuntu-latest # O GitHub empresta um computador Linux pra gente
+    
+    steps:
+    - name: Baixar o código (Checkout)
+      uses: actions/checkout@v4
+
+    - name: Montar o Docker Compose
+      # Tenta construir os containers. Se tiver erro no Dockerfile, explode aqui.
+      run: docker-compose build
+
+  # Tarefa 2: Testar o Frontend (React)
+  build-frontend:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Baixar o código
+      uses: actions/checkout@v4
+
+    - name: Instalar Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Instalar dependências do Frontend
+      run: |
+        cd frontend-casi
+        npm install
+
+    - name: Tentar compilar o React (Build)
+      # Verifica se não tem erro de sintaxe no React
+      run: |
+        cd frontend-casi
+        npm run build
