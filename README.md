@@ -1,5 +1,7 @@
 # API de Microsserviços com Node.js e CI/CD na AWS
 
+[![CI Pipeline - Sistema CA-SI 🚀](https://github.com/marlondcury/trabalho_topicos_redes/actions/workflows/ci.yml/badge.svg)](https://github.com/marlondcury/trabalho_topicos_redes/actions/workflows/ci.yml)
+
 Este repositório contém o desenvolvimento de uma API baseada em **arquitetura de microsserviços**, desenvolvida como parte da disciplina de **Tópicos Especiais em Redes**.
 
 O objetivo do projeto é a implementação de serviços independentes, conteinerização e orquestração em nuvem, seguindo práticas modernas de DevOps.
@@ -53,7 +55,7 @@ O sistema foi desenhado para operar de forma distribuída:
 - [x] Persistência de dados (MySQL) 
 - [x] Autenticação segura (JWT)
 - [x] Containerização (Docker)
-- [ ] Pipeline de CI/CD (GitHub Actions) 
+- [x]  Pipeline de CI/CD (GitHub Actions) 
 - [ ] Deploy na AWS (ECS + RDS) 
 
 ---
