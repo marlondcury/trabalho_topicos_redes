@@ -1,20 +1,20 @@
 # API de Microsserviços com Node.js e CI/CD na AWS
 
-Este repositório contém o desenvolvimento de uma API baseada em **arquitetura de microsserviços**, desenvolvida como parte da disciplina de **Tópicos Especiais em Redes**[cite: 5].
+Este repositório contém o desenvolvimento de uma API baseada em **arquitetura de microsserviços**, desenvolvida como parte da disciplina de **Tópicos Especiais em Redes**.
 
 O objetivo do projeto é a implementação de serviços independentes, conteinerização e orquestração em nuvem, seguindo práticas modernas de DevOps.
 
 ##  Tecnologias e Ferramentas
 
-* **Linguagem:** JavaScript (Node.js) [cite: 29]
-* **Banco de Dados:** MySQL (Amazon RDS planejado) [cite: 18]
-* **Autenticação:** JWT (JSON Web Token) [cite: 64]
-* **Infraestrutura (Em progresso):** AWS ECS, Docker [cite: 16]
-* **CI/CD (Em progresso):** GitHub Actions [cite: 62]
+* **Linguagem:** JavaScript (Node.js) 
+* **Banco de Dados:** MySQL (Amazon RDS planejado)
+* **Autenticação:** JWT (JSON Web Token) 
+* **Infraestrutura (Em progresso):** AWS ECS, Docker 
+* **CI/CD (Em progresso):** GitHub Actions 
 
 ## ARCHITECTURE & SERVIÇOS
 
-O sistema foi desenhado para operar de forma distribuída[cite: 43]:
+O sistema foi desenhado para operar de forma distribuída:
 
 1.  **Auth Service:** Responsável pelo login e geração de tokens JWT.
 2.  **Events Service:** Gerenciamento de eventos/cadastros (CRUD).
@@ -49,12 +49,12 @@ O sistema foi desenhado para operar de forma distribuída[cite: 43]:
 
 ## 🗺️ Roadmap do Projeto
 
-- [x] Implementação dos microsserviços (Node.js) [cite: 15]
-- [x] Persistência de dados (MySQL) [cite: 18]
-- [x] Autenticação segura (JWT) [cite: 64]
+- [x] Implementação dos microsserviços (Node.js) 
+- [x] Persistência de dados (MySQL) 
+- [x] Autenticação segura (JWT)
 - [ ] Containerização (Docker)
-- [ ] Pipeline de CI/CD (GitHub Actions) [cite: 20]
-- [ ] Deploy na AWS (ECS + RDS) [cite: 13]
+- [ ] Pipeline de CI/CD (GitHub Actions) 
+- [ ] Deploy na AWS (ECS + RDS) 
 
 ---
-Desenvolvido por [Seu Nome] - UFES [cite: 3]
+Desenvolvido por Marlon Domingos Cury - UFES 
