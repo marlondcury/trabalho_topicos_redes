@@ -13,6 +13,18 @@ jobs:
     steps:
     - name: Baixar o código (Checkout)
       uses: actions/checkout@v4
+      
+    - name: Instalar dependências e Rodar Testes (Auth)
+      run: |
+        cd auth-service
+        npm install
+        npm test  # Agora roda email + senha
+
+    - name: Instalar dependências e Rodar Testes (Events)
+      run: |
+        cd events-service
+        npm install
+        npm test  # Roda validação de data
 
     - name: Montar o Docker Compose
       run: docker compose build
