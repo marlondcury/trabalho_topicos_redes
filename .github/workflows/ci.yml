@@ -7,31 +7,9 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-backend:
+  # --- JOB 1: TESTES UNITÁRIOS (O que você quer ver!) ---
+  unit-tests:
     runs-on: ubuntu-latest
-    
-    steps:
-    - name: Baixar o código (Checkout)
-      uses: actions/checkout@v4
-      
-    - name: Instalar dependências e Rodar Testes (Auth)
-      run: |
-        cd auth-service
-        npm install
-        npm test  # Agora roda email + senha
-
-    - name: Instalar dependências e Rodar Testes (Events)
-      run: |
-        cd events-service
-        npm install
-        npm test  # Roda validação de data
-
-    - name: Montar o Docker Compose
-      run: docker compose build
-
-  build-frontend:
-    runs-on: ubuntu-latest
-    
     steps:
     - name: Baixar o código
       uses: actions/checkout@v4
@@ -39,14 +17,49 @@ jobs:
     - name: Instalar Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '20'  
+        node-version: '20'
+
+    - name: Testar Auth Service (Jest)
+      run: |
+        cd auth-service
+        npm install
+        npm test
+
+    - name: Testar Events Service (Jest)
+      run: |
+        cd events-service
+        npm install
+        npm test
+
+  # --- JOB 2: BUILD BACKEND (Docker) ---
+  build-backend:
+    needs: unit-tests  # IMPORTANTE: Só roda se os testes passarem!
+    runs-on: ubuntu-latest
+    steps:
+    - name: Baixar o código
+      uses: actions/checkout@v4
+
+    - name: Montar o Docker Compose
+      run: docker compose build
+
+  # --- JOB 3: BUILD FRONTEND (React) ---
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Baixar o código
+      uses: actions/checkout@v4
+
+    - name: Instalar Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
 
     - name: Instalar dependências do Frontend
       run: |
         cd frontend-casi
         npm install
 
-    - name: Tentar compilar o React (Build)
+    - name: Compilar o React (Build)
       run: |
         cd frontend-casi
         npm run build
