@@ -1,65 +1,72 @@
-name: CI Pipeline - Sistema CA-SI 🚀
+name: CI/CD Pipeline - Sistema CA-SI 
 
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
-  # --- JOB 1: TESTES UNITÁRIOS (O que você quer ver!) ---
+  # --- JOB 1: TESTES UNITÁRIOS ---
   unit-tests:
     runs-on: ubuntu-latest
     steps:
-    - name: Baixar o código
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with: { node-version: '20' }
+    
+    - name: Testar Auth Service
+      run: cd auth-service && npm install && npm test
+      
+    - name: Testar Events Service
+      run: cd events-service && npm install && npm test
 
-    - name: Instalar Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-
-    - name: Testar Auth Service (Jest)
-      run: |
-        cd auth-service
-        npm install
-        npm test
-
-    - name: Testar Events Service (Jest)
-      run: |
-        cd events-service
-        npm install
-        npm test
-
-  # --- JOB 2: BUILD BACKEND (Docker) ---
-  build-backend:
-    needs: unit-tests  # IMPORTANTE: Só roda se os testes passarem!
+  # --- JOB 2: BUILD E PUSH PARA AWS ECR ---
+  build-and-push-ecr:
+    needs: unit-tests
     runs-on: ubuntu-latest
+    
     steps:
-    - name: Baixar o código
+    - name: Baixar código
       uses: actions/checkout@v4
 
-    - name: Montar o Docker Compose
-      run: docker compose build
+    - name: Configurar Credenciais AWS
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}  # <--- LINHA NOVA OBRIGATÓRIA PARA LEARNER LAB
+        aws-region: ${{ secrets.AWS_REGION }}
 
-  # --- JOB 3: BUILD FRONTEND (React) ---
+    - name: Login no Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Build e Push Auth Service
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: casi-auth-service
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./auth-service
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest ./auth-service
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+    - name: Build e Push Events Service
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: casi-events-service
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./events-service
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest ./events-service
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+  # --- JOB 3: BUILD FRONTEND ---
   build-frontend:
     runs-on: ubuntu-latest
     steps:
-    - name: Baixar o código
-      uses: actions/checkout@v4
-
-    - name: Instalar Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-
-    - name: Instalar dependências do Frontend
-      run: |
-        cd frontend-casi
-        npm install
-
-    - name: Compilar o React (Build)
-      run: |
-        cd frontend-casi
-        npm run build
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with: { node-version: '20' }
+    - run: cd frontend-casi && npm install && npm run build
