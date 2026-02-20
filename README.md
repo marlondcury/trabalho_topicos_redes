@@ -56,7 +56,7 @@ O sistema foi desenhado para operar de forma distribuída:
 - [x] Autenticação segura (JWT)
 - [x] Containerização (Docker)
 - [x]  Pipeline de CI/CD (GitHub Actions) 
-- [ ] Deploy na AWS (ECS + RDS) 
+- [x] Deploy na AWS (ECS + RDS) 
 
 ---
 Desenvolvido por Marlon Domingos Cury - UFES 
